@@ -37,6 +37,10 @@ func TestFileFilter(t *testing.T) {
 			true,
 		},
 		{
+			filepath.Join("b", "resize2", "pic.jpg"),
+			false,
+		},
+		{
 			filepath.Join("a", "b", "pic.JPG"),
 			true,
 		},
@@ -52,7 +56,12 @@ func TestFileFilter(t *testing.T) {
 	for _, test := range tests {
 		got := fileFilter(test.str)
 		if got != test.expect {
-			t.Errorf("Expect: %v, Got: %v", test.expect, got)
+			t.Errorf(
+				"%s\nExpect: %v, Got: %v",
+				test.str,
+				test.expect,
+				got,
+			)
 		}
 	}
 }

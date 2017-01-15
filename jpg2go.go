@@ -13,7 +13,7 @@ type FilePathsGetter interface {
 	Get(root string) []string
 }
 
-// Imager takes a filePath and return an Image
+// Imager takes a filePath and returns an Image
 type Imager interface {
 	Image(filePath string) (image.Image, error)
 }

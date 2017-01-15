@@ -20,19 +20,17 @@ var srcFolder = ""
 var relResizeFolder = "resize"
 var resizeFolder = ""
 
-func init() {
-	resizeFolder = filepath.Join(srcFolder, relResizeFolder)
-}
-
 func main() {
 	flag.StringVar(&srcFolder, "src", "./", "Source folder which is scanned")
 	flag.StringVar(&relResizeFolder, "dst", "resize", "Subfolder inside the src where the resized pictures are saved.")
 	width := flag.Int("w", 200, "Max width of the resize picture")
 	height := flag.Int("h", 200, "Max height of the resize picture")
 	flag.Parse()
-
+	resizeFolder = filepath.Join(srcFolder, relResizeFolder)
+	// FilePathsGetter using osfiles
 	fpg := osfiles.NewFilewalk()
 	fpg.Filter = fileFilter
+
 	imager := &jpg.Imager{}
 	writer := &jpg.Writer{}
 	writer.Path = makePath
@@ -53,8 +51,11 @@ func main() {
 	}
 }
 
+// fileFilter returns ture, when I file should be used
+// is needed for the osfiles package
 func fileFilter(path string) bool {
 	// Skips all files of the dst folder
+	// TODO: closure of resizeFolder is not clean code
 	if strings.HasPrefix(path, resizeFolder) {
 		return false
 	}
@@ -66,6 +67,7 @@ func fileFilter(path string) bool {
 	return false
 }
 
+// makePath function is needed for the jpg package
 func makePath(srcPath string) string {
 	relPath, _ := filepath.Rel(
 		srcFolder,
